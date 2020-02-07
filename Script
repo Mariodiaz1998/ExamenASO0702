@@ -1,0 +1,54 @@
+#Mario Diaz ASIR 2 Examen 07/02/20
+#Crear unidades organizativas
+$OU1= New-ADOrganizationalUnit -Name OUnit1
+$OU2= New-ADOrganizationalUnit -Name OUnit2
+$OU3= New-ADOrganizationalUnit -Name OUnit3
+$OU4= New-ADOrganizationalUnit -Name OUnit4
+$OU5= New-ADOrganizationalUnit -Name OUnit5
+$OUDIS= New-ADOrganizationalUnit -Name Disable
+$OU6= New-ADOrganizationalUnit -Name OUnit6
+
+#Crear grupos dentro de unidades organizativas
+$NI1 = (Get-Content gruposclase.txt -TotalCount 1)[-1]
+$NI2 = (Get-Content gruposclase.txt -TotalCount 2)[-1]
+$NI3 = (Get-Content gruposclase.txt -TotalCount 3)[-1]
+$NI4 = (Get-Content gruposclase.txt -TotalCount 4)[-1]
+$NI5 = (Get-Content gruposclase.txt -TotalCount 5)[-1]
+$NI6 = (Get-Content gruposclase.txt -TotalCount 6)[-1]
+
+$GR1= New-ADGroup -Name "$NI1" -GroupScope DomainLocal -Path "OU=OUnit1, DC=mario,DC=local"
+$GR2= New-ADGroup -Name "$NI2" -GroupScope DomainLocal -Path "OU=OUnit2, DC=mario,DC=local"
+$GR3= New-ADGroup -Name "$NI3" -GroupScope DomainLocal -Path "OU=OUnit3, DC=mario,DC=local"
+$GR4= New-ADGroup -Name "$NI4" -GroupScope DomainLocal -Path "OU=OUnit4, DC=mario,DC=local"
+$GR5= New-ADGroup -Name "$NI5" -GroupScope DomainLocal -Path "OU=OUnit5, DC=mario,DC=local"
+$GR6= New-ADGroup -Name "$NI6" -GroupScope DomainLocal -Path "OU=OUnit6, DC=mario,DC=local"
+
+#Crear usuarios y meterlos en un grupo
+$NI1 = (Get-Content usuariosclase.txt -TotalCount 1)[-1]
+$NI2 =(Get-Content usuariosclase.txt -TotalCount 2)[-1]
+$NI3 = (Get-Content usuariosclase.txt -TotalCount 3)[-1]
+$NI4 = (Get-Content usuariosclase.txt -TotalCount 4)[-1]
+$NI5 = (Get-Content usuariosclase.txt -TotalCount 5)[-1]
+$NI6 = (Get-Content usuariosclase.txt -TotalCount 6)[-1]
+
+$USER1= New-ADUser -Name $NI1 -Enabled 1 -Path "OU=OUnit1, DC=mario,DC=local"
+$USER2= New-ADUser -Name $NI2 -Enabled 1 -Path "OU=OUnit2, DC=mario,DC=local"
+$USER3= New-ADUser -Name $NI3 -Enabled 1 -Path "OU=OUnit3, DC=mario,DC=local"
+ $USER4= New-ADUser -Name $NI4 -Enabled 1 -Path "OU=OUnit4, DC=mario,DC=local"
+$USER5= New-ADUser -Name $NI5 -Enabled 1 -Path "OU=OUnit5, DC=mario,DC=local"
+$USER6= New-ADUser -Name $NI6 -Enabled 1 -Path "OU=OUnit6, DC=mario,DC=local"
+
+Add-ADGroupMember -Identity $GR1 -Members $USER1
+Add-ADGroupMember -Identity $GR2 -Members $USER2
+Add-ADGroupMember -Identity $GR3 -Members $USER3
+Add-ADGroupMember -Identity $GR4 -Members $USER4
+Add-ADGroupMember -Identity $GR5 -Members $USER5
+Add-ADGroupMember -Identity $GR6 -Members $USER6 
+
+
+#Borrar unidades organizativas
+Set-ADOrganizationalUnit -Identity 
+Remove-ADOrganizationalUnit -Identity "OU=$OU1 $OU2 $OU3 $OU4 $OU5 $OU6" 
+
+#Desabilitar usuarios y moverlos a la UO de los desabilitados
+Set-ADUser -Identity $USER1 $USER2 $USER3 $USER4 $USER5 $USER6  -Enabled 0 
